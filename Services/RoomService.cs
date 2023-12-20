@@ -13,19 +13,28 @@ namespace net_ita_2_checkpoint.Services
             _db = db;
         }
 
-        public Task CreateRoomAsync(CreateRoomDTO dto)
+        public async Task CreateRoomAsync(CreateRoomDTO dto)
         {
-            throw new NotImplementedException();
+           
+              _db.Rooms.Add(new Entities.Room {Id=dto.Id, Name= dto.Name, Type = dto.Type , People=dto.People, Price=dto.Price});
         }
 
-        public Task DeleteRoomAsync(Guid id)
+        public  async Task DeleteRoomAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var y = _db.Rooms.FirstOrDefault(f => f.Id == id);
+            _db.Rooms.Remove(y);
         }
 
-        public Task<ICollection<RoomListDTO>> GetAllRoomsAsync()
+        public async Task<ICollection<RoomListDTO>> GetAllRoomsAsync()
         {
-            throw new NotImplementedException();
+            return _db.Rooms.Select(s => new RoomListDTO
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Type = s.Type,
+                People = s.People,
+                Price = s.Price
+            }).ToList() ;
         }
 
         public Task<ICollection<RoomListDTO>> GetAvailableRoomsAsync(DateTime date)
@@ -33,14 +42,29 @@ namespace net_ita_2_checkpoint.Services
             throw new NotImplementedException();
         }
 
-        public Task<RoomDetailDTO> GetRoomAsync(Guid id)
+        public async Task<RoomDetailDTO> GetRoomAsync(Guid id)
         {
-            throw new NotImplementedException();
+            //   return  _db.Rooms.Where(f => f.Id == id).FirstOrDefault();
+
         }
 
-        public Task UpdateRoomAsync(UpdateRoomDTO dto)
+        public async Task UpdateRoomAsync(UpdateRoomDTO dto)
         {
-            throw new NotImplementedException();
+            var y = _db.Rooms.FirstOrDefault( f =>f.Id==dto.Id);
+            if (y== null)
+            {
+                Console.WriteLine("bla bla bla");
+            }
+            else
+            {
+                y.Id = dto.Id;
+                y.Name = dto.Name;
+                y.People = dto.People;
+                y.Type = dto.Type;
+                y.Price = dto.Price;
+
+            }
+
         }
     }
 }
